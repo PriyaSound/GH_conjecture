@@ -1,0 +1,312 @@
+Matrix 1:
+Code:
+/*        
+	int circ1[3][3] ={{-1,-1,1},{1,-1,-1},{-1,1,-1}};
+        int circ2[3][3] ={{-1,1,-1},{-1,-1,1},{1,-1,-1}};
+        int circ3[3][3] ={{1,1,1},{1,1,1},{1,1,1}};
+        int circ4[3][3] ={{1,-1,-1},{-1,1,-1},{-1,-1,1}};
+        int a_source[n][n]={{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+        int b_source[n][n]={{0,1,0,0},{-1,0,0,0},{0,0,0,1},{0,0,-1,0}};
+        int c_source[n][n]={{0,0,1,0},{0,0,0,-1},{-1,0,0,0},{0,1,0,0}};
+        int d_source[n][n]={{0,0,0,1},{0,0,1,0},{0,-1,0,0},{-1,0,0,0}};
+
+        circulant1 = initialize_matrix(&circ1[0][0],3,3);
+        circulant2 = initialize_matrix(&circ2[0][0],3,3);
+        circulant3 = initialize_matrix(&circ3[0][0],3,3);
+        circulant4 = initialize_matrix(&circ4[0][0],3,3);
+        a = initialize_matrix(&a_source[0][0],n,n);
+        b = initialize_matrix(&b_source[0][0],n,n);
+        c = initialize_matrix(&c_source[0][0],n,n);
+        d = initialize_matrix(&d_source[0][0],n,n);
+
+        int** matrix;
+        int** matrix1;
+        int** matrix2;
+        matrix = new_constr(circulant3,3,a,4);
+        matrix = Add(matrix,new_constr(circulant1,3,b,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant2,3,c,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant4,3,d,4),3*n,3*n);
+        matrix1 = matrix;
+        int perm_array1[12] ={11,10,9,8,7,6,5,4,3,2,1,0};
+        matrix1 = matrix_multiplication(permutation(perm_array1,12,1),matrix1,12);
+        print(matrix1,3*n);
+        cout<<"__________________"<<endl;
+        cout<<(check_Hadamard(matrix1,3*n))<<endl;
+
+
+        int perm_array2[12] = {3,2,1,0,4,5,6,7,9,8,11,10};
+        matrix = new_constr(circulant3,3,a,4);
+        matrix = Add(matrix,new_constr(circulant1,3,b,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant2,3,c,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant4,3,d,4),3*n,3*n);
+        matrix2 = matrix;
+        matrix2 = matrix_multiplication(matrix2, permutation(perm_array2,12,2),12);
+        print(matrix2,3*n);
+        cout<<"_________________"<<endl;
+        cout<<(check_Hadamard(matrix2,3*n))<<endl;
+
+
+	polynomial** p;
+        p = make_GH_from_H(matrix1, matrix2, 3*n, 2);
+        print_p(p,3*n);
+        cout<<check_Hadamard(Hadamard_product(matrix1,matrix2,3*n),3*n)<<endl;
+        int** Had;
+        Had = Hadamard_product(matrix1,matrix2,3*n);
+        print(matrix_multiplication(Had,Trans(Had,12),12),12);
+
+*/
+
+
+This matrix is the result of the last print statement.
+12 -4 -4 12 0 0 0 0 12 -4 -4 12 
+-4 12 12 -4 0 0 0 0 -4 12 12 -4 
+-4 12 12 -4 0 0 0 0 -4 12 12 -4 
+12 -4 -4 12 0 0 0 0 12 -4 -4 12 
+0 0 0 0 12 -4 -4 -4 0 0 0 0 
+0 0 0 0 -4 12 -4 -4 0 0 0 0 
+0 0 0 0 -4 -4 12 -4 0 0 0 0 
+0 0 0 0 -4 -4 -4 12 0 0 0 0 
+12 -4 -4 12 0 0 0 0 12 -4 -4 12 
+-4 12 12 -4 0 0 0 0 -4 12 12 -4 
+-4 12 12 -4 0 0 0 0 -4 12 12 -4 
+12 -4 -4 12 0 0 0 0 12 -4 -4 12 
+
+Matrix 2:
+Code:
+int circ1[3][3] ={{-1,-1,1},{1,-1,-1},{-1,1,-1}};
+        int circ2[3][3] ={{-1,1,-1},{-1,-1,1},{1,-1,-1}};
+        int circ3[3][3] ={{1,1,1},{1,1,1},{1,1,1}};
+        int circ4[3][3] ={{1,-1,-1},{-1,1,-1},{-1,-1,1}};
+        int a_source[n][n]={{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+        int b_source[n][n]={{0,1,0,0},{-1,0,0,0},{0,0,0,1},{0,0,-1,0}};
+        int c_source[n][n]={{0,0,1,0},{0,0,0,-1},{-1,0,0,0},{0,1,0,0}};
+        int d_source[n][n]={{0,0,0,1},{0,0,1,0},{0,-1,0,0},{-1,0,0,0}};
+
+        circulant1 = initialize_matrix(&circ1[0][0],3,3);
+        circulant2 = initialize_matrix(&circ2[0][0],3,3);
+        circulant3 = initialize_matrix(&circ3[0][0],3,3);
+        circulant4 = initialize_matrix(&circ4[0][0],3,3);
+        a = initialize_matrix(&a_source[0][0],n,n);
+        b = initialize_matrix(&b_source[0][0],n,n);
+        c = initialize_matrix(&c_source[0][0],n,n);
+        d = initialize_matrix(&d_source[0][0],n,n);
+
+        int** matrix;
+        int** matrix1;
+        int** matrix2;
+        matrix = new_constr(circulant3,3,a,4);
+        matrix = Add(matrix,new_constr(circulant1,3,b,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant2,3,c,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant4,3,d,4),3*n,3*n);
+        matrix1 = matrix;
+        int perm_array1[12] ={1,0,3,2,5,4,7,6,9,8,11,10};
+        matrix1 = matrix_multiplication(permutation(perm_array1,12,1),matrix1,12);
+        print(matrix1,3*n);
+        cout<<"__________________"<<endl;
+        cout<<(check_Hadamard(matrix1,3*n))<<endl;
+
+
+        int perm_array2[12] = {3,2,1,0,7,6,5,4,11,10,9,8};
+        matrix = new_constr(circulant3,3,a,4);
+        matrix = Add(matrix,new_constr(circulant1,3,b,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant2,3,c,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant4,3,d,4),3*n,3*n);
+        matrix2 = matrix;
+        matrix2 = matrix_multiplication(matrix2, permutation(perm_array2,12,2),12);
+        print(matrix2,3*n);
+        cout<<"_________________"<<endl;
+        cout<<(check_Hadamard(matrix2,3*n))<<endl;
+
+
+
+
+	 polynomial** p;
+        p = make_GH_from_H(matrix1, matrix2, 3*n, 2);
+        print_p(p,3*n);
+        cout<<check_Hadamard(Hadamard_product(matrix1,matrix2,3*n),3*n)<<endl;
+        int** Had;
+        Had = Hadamard_product(matrix1,matrix2,3*n);
+        print(matrix_multiplication(Had,Trans(Had,12),12),12);
+
+
+
+12 12 12 12 -4 -4 -4 -4 -4 -4 -4 -4 
+12 12 12 12 -4 -4 -4 -4 -4 -4 -4 -4 
+12 12 12 12 -4 -4 -4 -4 -4 -4 -4 -4 
+12 12 12 12 -4 -4 -4 -4 -4 -4 -4 -4 
+-4 -4 -4 -4 12 12 12 12 -4 -4 -4 -4 
+-4 -4 -4 -4 12 12 12 12 -4 -4 -4 -4 
+-4 -4 -4 -4 12 12 12 12 -4 -4 -4 -4 
+-4 -4 -4 -4 12 12 12 12 -4 -4 -4 -4 
+-4 -4 -4 -4 -4 -4 -4 -4 12 12 12 12 
+-4 -4 -4 -4 -4 -4 -4 -4 12 12 12 12 
+-4 -4 -4 -4 -4 -4 -4 -4 12 12 12 12 
+-4 -4 -4 -4 -4 -4 -4 -4 12 12 12 12 
+
+Matrix 3
+
+int circ1[3][3] ={{-1,-1,1},{1,-1,-1},{-1,1,-1}};
+        int circ2[3][3] ={{-1,1,-1},{-1,-1,1},{1,-1,-1}};
+        int circ3[3][3] ={{1,1,1},{1,1,1},{1,1,1}};
+        int circ4[3][3] ={{1,-1,-1},{-1,1,-1},{-1,-1,1}};
+        int a_source[n][n]={{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+        int b_source[n][n]={{0,1,0,0},{-1,0,0,0},{0,0,0,1},{0,0,-1,0}};
+        int c_source[n][n]={{0,0,1,0},{0,0,0,-1},{-1,0,0,0},{0,1,0,0}};
+        int d_source[n][n]={{0,0,0,1},{0,0,1,0},{0,-1,0,0},{-1,0,0,0}};
+
+        circulant1 = initialize_matrix(&circ1[0][0],3,3);
+        circulant2 = initialize_matrix(&circ2[0][0],3,3);
+        circulant3 = initialize_matrix(&circ3[0][0],3,3);
+        circulant4 = initialize_matrix(&circ4[0][0],3,3);
+        a = initialize_matrix(&a_source[0][0],n,n);
+        b = initialize_matrix(&b_source[0][0],n,n);
+        c = initialize_matrix(&c_source[0][0],n,n);
+        d = initialize_matrix(&d_source[0][0],n,n);
+
+        int** matrix;
+        int** matrix1;
+        int** matrix2;
+        matrix = new_constr(circulant3,3,a,4);
+        matrix = Add(matrix,new_constr(circulant1,3,b,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant1,3,c,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant1,3,d,4),3*n,3*n);
+        matrix1 = matrix;
+        int perm_array1[12] ={11,10,9,8,7,6,5,4,3,2,1,0};
+        matrix1 = matrix_multiplication(permutation(perm_array1,12,1),matrix1,12);
+        print(matrix1,3*n);
+        cout<<"__________________"<<endl;
+        cout<<(check_Hadamard(matrix1,3*n))<<endl;
+
+
+        int perm_array2[12] = {11,10,9,8,7,6,5,4,3,2,1,0};
+        matrix = new_constr(circulant3,3,a,4);
+        matrix = Add(matrix,new_constr(circulant2,3,b,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant2,3,c,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant2,3,d,4),3*n,3*n);
+        matrix2 = matrix;
+//      matrix2 = matrix_multiplication(matrix2, permutation(perm_array2,12,2),12);
+        print(matrix2,3*n);
+        cout<<"_________________"<<endl;
+        cout<<(check_Hadamard(matrix2,3*n))<<endl;
+
+	polynomial** p;
+        p = make_GH_from_H(matrix1, matrix2, 3*n, 2);
+        print_p(p,3*n);
+        cout<<check_Hadamard(Hadamard_product(matrix1,matrix2,3*n),3*n)<<endl;
+        int** Had;
+        Had = Hadamard_product(matrix1,matrix2,3*n);
+        print(matrix_multiplication(Had,Trans(Had,12),12),12);
+
+
+
+12 4 4 12 -4 -4 -4 -4 -4 -4 -4 -4 
+4 12 12 4 -4 -4 -4 -4 -4 -4 -4 -4 
+4 12 12 4 -4 -4 -4 -4 -4 -4 -4 -4 
+12 4 4 12 -4 -4 -4 -4 -4 -4 -4 -4 
+-4 -4 -4 -4 12 4 4 4 4 4 4 12 
+-4 -4 -4 -4 4 12 4 4 4 4 12 4 
+-4 -4 -4 -4 4 4 12 4 4 12 4 4 
+-4 -4 -4 -4 4 4 4 12 12 4 4 4 
+-4 -4 -4 -4 4 4 4 12 12 4 4 4 
+-4 -4 -4 -4 4 4 12 4 4 12 4 4 
+-4 -4 -4 -4 4 12 4 4 4 4 12 4 
+-4 -4 -4 -4 12 4 4 4 4 4 4 12 
+
+Matrix 4(Important)
+Code:
+int circ1[3][3] ={{1,1,-1},{-1,1,1},{1,-1,1}};
+        int circ2[3][3] ={{-1,1,-1},{-1,-1,1},{1,-1,-1}};
+        int circ3[3][3] ={{1,1,1},{1,1,1},{1,1,1}};
+        int circ4[3][3] ={{1,-1,-1},{-1,1,-1},{-1,-1,1}};
+        int a_source[n][n]={{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+        int b_source[n][n]={{0,1,0,0},{-1,0,0,0},{0,0,0,-1},{0,0,1,0}};
+        int c_source[n][n]={{0,0,1,0},{0,0,0,1},{-1,0,0,0},{0,-1,0,0}};
+        int d_source[n][n]={{0,0,0,1},{0,0,-1,0},{0,1,0,0},{-1,0,0,0}};
+
+        circulant1 = initialize_matrix(&circ1[0][0],3,3);
+        circulant2 = initialize_matrix(&circ2[0][0],3,3);
+        circulant3 = initialize_matrix(&circ3[0][0],3,3);
+        circulant4 = initialize_matrix(&circ4[0][0],3,3);
+        a = initialize_matrix(&a_source[0][0],n,n);
+        b = initialize_matrix(&b_source[0][0],n,n);
+        c = initialize_matrix(&c_source[0][0],n,n);
+        d = initialize_matrix(&d_source[0][0],n,n);
+
+        int** matrix;
+        int** matrix1;
+        int** matrix2;
+        matrix = new_constr(circulant3,3,a,4);
+        matrix = Add(matrix,new_constr(circulant1,3,b,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant1,3,c,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant1,3,d,4),3*n,3*n);
+        matrix1 = matrix;
+        int perm_array1[12] ={11,10,9,8,7,6,5,4,3,2,1,0};
+        //matrix1 = matrix_multiplication(permutation(perm_array1,12,1),matrix1,12);
+        print(matrix1,3*n);
+        cout<<"__________________"<<endl;
+        cout<<(check_Hadamard(matrix1,3*n))<<endl;
+
+
+        int perm_array2[12] = {11,10,9,8,7,6,5,4,3,2,1,0};
+        matrix = new_constr(circulant3,3,a,4);
+        matrix = Add(matrix,new_constr(circulant2,3,b,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant2,3,c,4),3*n,3*n);
+        matrix = Add(matrix,new_constr(circulant2,3,d,4),3*n,3*n);
+        matrix2 = matrix;
+        // matrix2 = matrix_multiplication(matrix2, permutation(perm_array2,12,2),12);
+        print(matrix2,3*n);
+        cout<<"_________________"<<endl;
+        cout<<(check_Hadamard(matrix2,3*n))<<endl;
+
+ polynomial** p;
+        p = make_GH_from_H(matrix1, matrix2, 3*n, 2);
+        print_p(p,3*n);
+        cout<<check_Hadamard(Hadamard_product(matrix1,matrix2,3*n),3*n)<<endl;
+        int** Had;
+        Had = Hadamard_product(matrix1,matrix2,3*n);
+        print(matrix_multiplication(Had,Trans(Had,12),12),12);
+
+12 8 8 8 0 0 0 0 0 0 0 0 
+8 12 8 8 0 0 0 0 0 0 0 0 
+8 8 12 8 0 0 0 0 0 0 0 0 
+8 8 8 12 0 0 0 0 0 0 0 0 
+0 0 0 0 12 8 8 8 0 0 0 0 
+0 0 0 0 8 12 8 8 0 0 0 0 
+0 0 0 0 8 8 12 8 0 0 0 0 
+0 0 0 0 8 8 8 12 0 0 0 0 
+0 0 0 0 0 0 0 0 12 8 8 8 
+0 0 0 0 0 0 0 0 8 12 8 8 
+0 0 0 0 0 0 0 0 8 8 12 8 
+0 0 0 0 0 0 0 0 8 8 8 12 
+
+Matrix 5
+(Construction unknown)
+12 0 -8 0 0 0 0 0 0 8 0 -8 
+0 12 0 -8 0 0 0 0 8 0 -8 0 
+-8 0 12 0 0 0 0 0 0 -8 0 8 
+0 -8 0 12 0 0 0 0 -8 0 8 0 
+0 0 0 0 12 8 8 8 0 0 0 0 
+0 0 0 0 8 12 8 8 0 0 0 0 
+0 0 0 0 8 8 12 8 0 0 0 0 
+0 0 0 0 8 8 8 12 0 0 0 0 
+0 8 0 -8 0 0 0 0 12 0 -8 0 
+8 0 -8 0 0 0 0 0 0 12 0 -8 
+0 -8 0 8 0 0 0 0 -8 0 12 0 
+-8 0 8 0 0 0 0 0 0 -8 0 12 
+
+Matrix 6
+(Construction unknown)
+
+12 0 -8 0 0 0 0 0 0 0 0 0 
+0 12 0 -8 0 0 0 0 0 0 0 0 
+-8 0 12 0 0 0 0 0 0 0 0 0 
+0 -8 0 12 0 0 0 0 0 0 0 0 
+0 0 0 0 12 0 0 -8 0 0 0 0 
+0 0 0 0 0 12 -8 0 0 0 0 0 
+0 0 0 0 0 -8 12 0 0 0 0 0 
+0 0 0 0 -8 0 0 12 0 0 0 0 
+0 0 0 0 0 0 0 0 12 -8 0 0 
+0 0 0 0 0 0 0 0 -8 12 0 0 
+0 0 0 0 0 0 0 0 0 0 12 -8 
+0 0 0 0 0 0 0 0 0 0 -8 12 
+
