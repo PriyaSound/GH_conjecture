@@ -1,10 +1,33 @@
 /*
- * This program checks 3 files, based on the index input which can be 1, 2 or 3, for strings of the type "-1"
- * The files are located in /home/soundap9/o and are called:
- * o.15.part (index=1)
- * o_part2.16.part (index=2)
- * o_part3.17.part (index=3)
- * The three files are the output files for 3 condor programs run on cluster 15, 16 and 17
+ * This program checks 4 output files of 4 different programs run on condor, based on the index input which can be 1, 2, 3 or 4, for strings of the type "-1".
+ * The four files are the output files for 4 condor programs run on cluster 15, 16, 17 and 20
+ * 3 of the files are located in /home/soundap9/o and are called:
+ * 
+ * o.15.($part) (index=1)
+ * Details:
+ * (Stopped)
+ *
+ * o_part2.16.($part) (index=2)
+ * Details:
+ * Program: part_2_trial_second_construction_20.cc
+ * Executable: p2tsc2
+ * (Running)
+ *
+ *
+ * o_part3.17.($part) (index=3)
+ * Details:
+ * Program: part_3_trial_second_construction_20.cc
+ * Executable: p3tsc2
+ * (Running)
+ *
+ *
+ * 1 is located in /home/soundap9/attempt_2_o and is called:
+ * o_part4.20.($part) (index=4)
+ * Details:
+ * Program: 20_check_permutation_matrix1_matrix2.cc
+ * Executable: 2cpmm
+ * (Running)
+ *
  * The program basically checks if any of the 3 programs have printed a Hadamard matrix.
  */
 
@@ -109,7 +132,7 @@ bool readFile(int num, int part)
 		if(num==2 || num==3)
 		filename = "/home/soundap9/o/o_part" +  str_num + "." +  str_14num + "." +  str_part;
 		else if(num==4)
-		filename = "/home/soundap9/attempt_2_o/o_part" + str_num + ".19." + str_part;
+		filename = "/home/soundap9/attempt_2_o/o_part" + str_num + ".20." + str_part;
 		outputfile.open(filename.c_str(),ios::in|ios::out|ios::app);
                 if(outputfile.is_open())
                 {       

@@ -1,3 +1,20 @@
+/* ORDER 20
+ * What does this program do?
+ * This program uses 2 Hadamard matrices of order 20,one made by Tonchev called Hadamard_tonch, and another using (Paley's?) construction called Hadamard_pal.
+ * It checks if the Hadamard product of row perm1 applied to matrix1 and col perm2 applied to matrix2 is Hadamard or not.
+ */
+
+/*
+ * Input required: At runtime, any integer between 0 - (2^5 -1)
+ */
+
+/*Data structures used:
+ * Hadamard_tonch and Hadamard_pal are static arrays.
+ * Static int arrays are used to store most of the matrices, except for matrix1 and matrix2 which are double pointers. This was done for better memory management, since for pointers it is necessary
+ * to use delete() every time new() is used, otherwise it would lead to a memory exhaustion.
+ *  
+ */
+
 #include <iostream>
 #include <cmath>
 #include <ctime>
@@ -15,8 +32,8 @@ int hht[20][20] = {{0}};
 // Checks if a matrix is Hadamard or not
 bool Had_Had_t();
 
-//Converts a given index to a binary of 5 digits
 
+//Functions not used in the program mainly because they require pointer arguments and most of the program is written using static arrays
 //Produces the Kronecker product of circulant matrix and random matrix a.
 int** new_constr(int** circulant,int order_circ, int** a,int order_a);
 //auxillary function to calculate minimum number of zeroes in a row in a matrix. 
@@ -35,6 +52,10 @@ int** a;
 int** b;
 int** c;
 int** d;
+int** matrix;
+int** matrix1;
+int** matrix2;
+
 int main(int argc,char* argv[])
 {
 
@@ -42,11 +63,17 @@ int main(int argc,char* argv[])
 	int** Williamson2;
 	int** Williamson3;
 	int** Williamson4;
+	int** Williamsont;
+
 	int Will_1[5][5]={{-1,1,1,1,1},{1,-1,1,1,1},{1,1,-1,1,1},{1,1,1,-1,1},{1,1,1,1,-1}};
 	int Will_2[5][5]={{-1,1,1,1,1},{1,-1,1,1,1},{1,1,-1,1,1},{1,1,1,-1,1},{1,1,1,1,-1}};
 	int Will_3[5][5]={{1,1,-1,-1,1},{1,1,1,-1,-1},{-1,1,1,1,-1},{-1,-1,1,1,1},{1,-1,-1,1,1}};
 	int Will_4[5][5]={{1,-1,1,1,-1},{-1,1,-1,1,1},{1,-1,1,-1,1},{1,1,-1,1,-1},{-1,1,1,-1,1}};
-	int Will_t[5][5]={{-1,1,-1,1,1},{1,-1,1,-1,1},{1,1,-1,1,-1},{-1,1,1,-1,1}},{1,-1,1,1,-1};
+	
+	//This is a test matrix. Fill it with test values and plug it in the program to see how the results change. 
+	//For fun, I rotated Will_4 by one turn and put it in Will_t, and used Will_t
+	//instead of Will_4 to make matrix2. Turns out that matrix2 is not Hadamard
+	int Will_t[5][5]={{-1,1,-1,1,1},{1,-1,1,-1,1},{1,1,-1,1,-1},{-1,1,1,-1,1},{1,-1,1,1,-1}};
 	int a_source[4][4]={{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
         int b_source[4][4]={{0,1,0,0},{-1,0,0,0},{0,0,0,-1},{0,0,1,0}};
         int c_source[4][4]={{0,0,1,0},{0,0,0,1},{-1,0,0,0},{0,-1,0,0}};
@@ -63,10 +90,7 @@ int main(int argc,char* argv[])
         c = initialize_matrix(&c_source[0][0],4,4);
         d = initialize_matrix(&d_source[0][0],4,4);
 
-        int** matrix;
-        int** matrix1;
-        int** matrix2;
-        matrix = Kronecker(Williamson1,a,5,4);
+               matrix = Kronecker(Williamson1,a,5,4);
         matrix = Add(matrix,Kronecker(Williamson2,b,5,4),20,20);
         matrix = Add(matrix,Kronecker(Williamson3,c,5,4),20,20);
         matrix = Add(matrix,Kronecker(Williamson4,d,5,4),20,20);
@@ -75,12 +99,13 @@ int main(int argc,char* argv[])
 	matrix = Kronecker(Williamson1,a,5,4);
         matrix = Add(matrix,Kronecker(Williamson2,b,5,4),20,20);
         matrix = Add(matrix,Kronecker(Williamson3,c,5,4),20,20);
-        matrix = Add(matrix,Kronecker(Williamsont,d,5,4),20,20);
+        matrix = Add(matrix,Kronecker(Williamson4,d,5,4),20,20);
         matrix2 = matrix;
      	
-     
+     	cout<<check_Hadamard(matrix1,20)<<endl;
+	cout<<check_Hadamard(matrix2,20)<<endl;
 	//Hadamard matrix of order 20 constructed by Tonchev
-	int Hadamard_20_2[20][20] ={{+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1},
+	int Hadamard_tonch[20][20] ={{+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1},
 		{+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
 		{+1,+1,+1,+1,+1,-1,-1,-1,-1,-1,+1,+1,+1,+1,+1,-1,-1,-1,-1,-1},
 		{+1,+1,+1,+1,-1,+1,-1,-1,-1,-1,+1,-1,-1,-1,-1,+1,+1,+1,+1,-1},
@@ -102,7 +127,7 @@ int main(int argc,char* argv[])
 		{+1,-1,-1,-1,+1,+1,+1,+1,-1,-1,+1,+1,-1,-1,+1,+1,-1,-1,+1,-1}
 	};
 	// Hadamard matrix of order 20 constructed by Paley(?)
-	int Hadamard_20_3[20][20] = {{+1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+	int Hadamard_pal[20][20] = {{+1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
 		{+1,+1,-1,+1,+1,-1,-1,-1,-1,+1,-1,+1,-1,+1,+1,+1,+1,-1,-1,+1},
 		{+1,+1,+1,-1,+1,+1,-1,-1,-1,-1,+1,-1,+1,-1,+1,+1,+1,+1,-1,-1},
 	    	{+1,-1,+1,+1,-1,+1,+1,-1,-1,-1,-1,+1,-1,+1,-1,+1,+1,+1,+1,-1},
@@ -127,10 +152,7 @@ int main(int argc,char* argv[])
         // This part of the program permutes matrix1 and matrix2 in permissible ways(eg, permuting a column block/row block, but not across column blocks)
         // and checks if their Hadamard product is Hadamard or not. The outer loop permutes matrix1 and the inner loop permutes matrix2.
      
- //Adding code to accomodate all types of block diagonal permutation matrices and not just those of the IxR type.
              
-//		cout<<check_Hadamard(Hadamard_20_2,20)<<endl;
-//		cout<<check_Hadamard(Hadamard_20_3,20)<<endl;
 		int perm1[20]={0};
 		int perm2[20]={0};
 		int index = atoi(argv[1]);
@@ -142,7 +164,7 @@ int main(int argc,char* argv[])
 	int all_perm_4[24][4]={{0,1,2,3},{0,1,3,2},{0,2,1,3},{0,2,3,1},{0,3,1,2},{0,3,2,1},{1,0,2,3},{1,0,3,2},{1,2,0,3},{1,2,3,0},{1,3,0,2},{1,3,2,0},{2,0,1,3},{2,0,3,1},{2,1,0,3},{2,1,3,0},{2,3,0,1},{2,3,1,0},{3,0,1,2},{3,0,2,1},{3,1,0,2},{3,1,2,0},{3,2,0,1},{3,2,1,0}};
 	bool cz;
 	bool check;
-	
+	//Outer nested loop to make perm1.
 	for(int i=(12*bin[0]);i<(12+12*bin[0]);i++)
 	{
 		for(int j=(12*bin[1]);j<(12+12*bin[1]);j++)
@@ -154,6 +176,7 @@ int main(int argc,char* argv[])
 					for(int m=(12*bin[4]);m<(12+12*bin[4]);m++)
 					{
 						
+						//Making perm1.
 						cout<<"i ="<<i<<" j= "<<j<<" k= "<<k<<" l= "<<l<<" m= "<<m<<endl;
 						for(int a1=0;a1<4;a1++)
 						{
@@ -176,6 +199,7 @@ int main(int argc,char* argv[])
 							perm1[e1]=16+all_perm_4[m][e1-16];
 						}
 
+						//Inner nested loop to make perm2.
 						for(int n=0;n<24;n++)
 						{
 							//cout<<" n= "<<n<<endl;
@@ -187,6 +211,7 @@ int main(int argc,char* argv[])
 									{
 										for(int s=0;s<24;s++)
 										{
+											//Making perm2.
 											for(int a2=0;a2<4;a2++)
                                                 					{
 												perm2[a2]=all_perm_4[n][a2];
@@ -207,12 +232,14 @@ int main(int argc,char* argv[])
 											{       
 												perm2[e2]=16+all_perm_4[s][e2-16];
 											}
+
+											//Checks if Hadamard product of perm1 applied to Hadamard_tonch and
+											//perm2 applied to Hadamard_pal is Hadamard or not.
 											for(int i1=0;i1<20;i1++)
 											{
 												for(int j1=0;j1<20;j1++)
 												{
-													//Had_prod[i1][j1]=Hadamard_20_2[perm1[i1]][j1]*Hadamard_20_3[i1][perm2[j1]];
-													Had_prod[i1][j1]=matrix1[perm1[i1]][j1]*matrix2[i1][perm2[j1]];
+													Had_prod[i1][j1]=Hadamard_tonch[perm1[i1]][j1]*Hadamard_pal[i1][perm2[j1]];
 
 												}
 											}

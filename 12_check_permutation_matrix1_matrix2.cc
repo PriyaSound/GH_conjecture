@@ -1,12 +1,12 @@
-`/*ORDER 12
+/*ORDER 12
  * What does this program do?
- * perm1 and perm2 are block diagonal permutation matrices of order 12, with block size=4. 
- * Two Hadamard matrices of order 12,matrix1 and matrix2 are made from Williamson matrices. 
- * This program can be used to test if the Hadamard product of row perm1 applied to matrix1, and column perm2 applied to matrix2 is also Hadamard. Uses Had_Had_t() function. 
- * In addition this program counts for how many of those compliant permutations perm1 and perm2 in the previous step, one of the diagonal blocks is the identity permutation
- * I_4, 
- * Example:  if perm1 and perm2 when applied to matrix1 and matrix2 respectively, produce two matrices whose Hadamard product is Hadamard, then perm1 and perm2 are compliant. 
- * If in either perm1 or perm2, one of the diagonal blocks is identity, then 'count' is incremented. 
+ * perm1 and perm2 are block diagonal permutation matrices of order 12, with block size=4.
+ * Procedure 1:This program takes constructs 2 Hadamard matrices of order 12,matrix1 and matrix2 using the inverse Williamson's construction,(for more information refer to the document 
+ * Inverse_Williamson_12_II.pdf).
+ *  It checks if the 2 Hadamard matrices of order 12 formed by two sets of circulant Williamson matrices are block equivalent or not.Row permutation perm1 and column permutation perm2 
+ *  are applied to matrix1 only, and checked to see if it is equal to matrix2. Uses check_if_equal(perm1,perm2).
+ * Procedure 2: This program can also be used to test if the Hadamard product of row perm1 applied to matrix1, and column perm2 applied to matrix2 is also Hadamard. Uses Had_Had_t() function. 
+ * The code for both the above procedures is included in the nested loops. Comment out whatever procedure is not required and run the program. 
 */
 
 
@@ -18,8 +18,7 @@
 
 /*
  * Data structures
- * This program uses static arrays of size 12, except for matrix1 and matrix2 which are pointers.All pointer related functions that are not defined here 
- * can be found in make_Bush_matrices.cc included in the program.
+ * This program uses static arrays of size 12, except for matrix1 and matrix2 which are pointers.All pointer related functions can be found in make_Bush_matrices.cc included in the program.
  */
 
 #include <iostream>
@@ -35,31 +34,41 @@ using namespace std;
 //Global variables
 int Had_prod[12][12]={{0}};
 int hht[12][12] = {{0}};
-
-// Checks if a matrix is Hadamard or not
-bool Had_Had_t();
-
-//Functions that havent been used in the program because they only involve pointers.
-//Produces the Kronecker product of circulant matrix and random matrix a.
-int** new_constr(int** circulant,int order_circ, int** a,int order_a);
-//auxillary function to calculate minimum number of zeroes in a row in a matrix. 
-bool count_zeroes();
-//Generates a 3-block diagonal permuation matrix depending on the parameters.
-int** block_diagonal_perm(int index_a,int index_b, int index_c,int index_d, int index_e, int k);
-// Generates a random permutation matrix of order 4 based on an index that can vary between 0 and 23.
-int** generate_perm_4(int index);
-//Generates a random permutation matrix of order 12 with the three permutation matrices of order 4 on its block diagonal.
-int** random_perm_matrix(int a, int b, int c,int d,int e);
-
 int** a;
 int** b;
 int** c;
 int** d;
 int** circulant1;int** circulant2;int** circulant3;int** circulant4;
-int** circulanttest;	
+int** circulanttest;
 int** matrix;
 int** matrix1;
-int** matrix2;
+int** matrix2;	
+
+
+
+// Checks if a matrix is Hadamard or not
+bool Had_Had_t();
+
+//This function checks if matrix1 permuted by perm1 on rows and perm2 on columns is equal to matrix2
+bool check_if_equal(int perm1[12], int perm2[12]);
+
+
+
+
+//Functions that haven't been used in the program.
+//Produces the Kronecker product of circulant matrix and random matrix a.
+int** new_constr(int** circulant,int order_circ, int** a,int order_a);
+//auxillary function to calculate minimum number of zeroes in a row in a matrix. 
+bool count_zeroes();
+
+//Generates a 3-block diagonal permuation matrix depending on the parameters.
+int** block_diagonal_perm(int index_a,int index_b, int index_c,int index_d, int index_e, int k);
+
+// Generates a random permutation matrix of order 4 based on an index that can vary between 0 and 23.
+int** generate_perm_4(int index);
+
+//Generates a random permutation matrix of order 12 with the three permutation matrices of order 4 on its block diagonal.
+int** random_perm_matrix(int a, int b, int c,int d,int e);
 
 /* main is passed two arguments, argc and argv[], which is a string
  * argc refers to the total number of arguments passed while calling the function
@@ -67,7 +76,6 @@ int** matrix2;
  * An example, if the instruction is: "gcc -o myprog myprog.c", then argc=4, argv[0] = gcc argv[1]=-o argv[2]=myprog argv[3]=myprog.c
  * if the instruction is "2cpmm 10",where 2cpmm is the executable for this program, argv[0]=2cpmm, argv[1]=10
  */
-
 
 int main(int argc,char* argv[])
 {
@@ -91,18 +99,18 @@ int main(int argc,char* argv[])
 	c = initialize_matrix(&c_source[0][0],4,4);
 	d = initialize_matrix(&d_source[0][0],4,4);
 
-	//First Williamson matrix.
+
 	matrix = Kronecker(circulant3,a,3,4);
-	matrix = Add(matrix,Kronecker(circulant1,b,3,4),12,12);
-	matrix = Add(matrix,Kronecker(circulant1,c,3,4),12,12);
-	matrix = Add(matrix,Kronecker(circulant1,d,3,4),12,12);
+	matrix = Add(matrix,Kronecker(circulanttest,b,3,4),12,12);
+	matrix = Add(matrix,Kronecker(circulanttest,c,3,4),12,12);
+	matrix = Add(matrix,Kronecker(circulanttest,d,3,4),12,12);
 	matrix1 = matrix;
 	
-	//Second Williamson matrix.
+
 	matrix = Kronecker(circulant3,a,3,4);
-        matrix = Add(matrix,Kronecker(circulant2,b,3,4),12,12);
-        matrix = Add(matrix,Kronecker(circulant2,c,3,4),12,12);
-        matrix = Add(matrix,Kronecker(circulant2,d,3,4),12,12);
+        matrix = Add(matrix,Kronecker(circulant1,b,3,4),12,12);
+        matrix = Add(matrix,Kronecker(circulant1,c,3,4),12,12);
+        matrix = Add(matrix,Kronecker(circulant1,d,3,4),12,12);
         matrix2 = matrix;
 
 	
@@ -111,103 +119,117 @@ int main(int argc,char* argv[])
         // This part of the program permutes matrix1 and matrix2 in permissible ways(eg, permuting a column block/row block, but not across column blocks)
         // and checks if their Hadamard product is Hadamard or not. The outer loop permutes matrix1 and the inner loop permutes matrix2.
      
+             
 		int perm1[12]={0};
 		int perm2[12]={0};
 		int index = atoi(argv[1]);
 		int* bin = integer_to_k(index,3);
 
  
- 
-//Matrix that contains all possible permutations on four variables.
+ //Matrix that contains all possible permutations on four variables.
 	int all_perm_4[24][4]={{0,1,2,3},{0,1,3,2},{0,2,1,3},{0,2,3,1},{0,3,1,2},{0,3,2,1},{1,0,2,3},{1,0,3,2},{1,2,0,3},{1,2,3,0},{1,3,0,2},{1,3,2,0},{2,0,1,3},{2,0,3,1},{2,1,0,3},{2,1,3,0},{2,3,0,1},{2,3,1,0},{3,0,1,2},{3,0,2,1},{3,1,0,2},{3,1,2,0},{3,2,0,1},{3,2,1,0}};
 	bool cz;
 	bool check;
 	int count=0;
 	
-	//Outer nested loop for perm1
+	
+	
+//Outer nested loop
 	for(int i=0/*(12*bin[0])*/;i<24/*(12+12*bin[0])*/;i++)
 	{
-		for(int j=0/*(12*bin[1])*/;j<24/*(12+12*bin[1])*/;j++)
-		{
-			for(int k=0/*(12*bin[2])*/;k<24/*(12+12*bin[2])*/;k++)
+			for(int j=0/*(12*bin[1])*/;j<24/*(12+12*bin[1])*/;j++)
 			{
-						
-						//Makes the first permutation matrix perm1
-					//	cout<<" j= "<<j<<" k= "<<k<<endl;
-						for(int a1=0;a1<4;a1++)
-						{
-							perm1[a1]=all_perm_4[i][a1];
-						}
-						for(int b1=4;b1<8;b1++)
-						{
-							perm1[b1]=4+all_perm_4[j][b1-4];
-						}
-						for(int c1=8;c1<12;c1++)
-						{
-							perm1[c1]=8+all_perm_4[k][c1-8];
-						}
+					for(int k=0/*(12*bin[2])*/;k<24/*(12+12*bin[2])*/;k++)
+					{
 
-						//Inner nested loop for perm2.
-						for(int n=0;n<24;n++)
-						{
-							for(int p=0;p<24;p++)
+							cout<<"i ="<<i<<"j= "<<j<<"k= "<<k<<endl;
+
+							//Makes the first permutation matrix, perm1.
+							for(int a1=0;a1<4;a1++)
 							{
-								for(int q=0;q<24;q++)
-								{
-											//Makes the second permutation matrix perm2.
-											for(int a2=0;a2<4;a2++)
-                                                					{
-												perm2[a2]=all_perm_4[n][a2];
-											}
-											for(int b2=4;b2<8;b2++)
-											{
-												perm2[b2]=4+all_perm_4[p][b2-4];
-											}
-											for(int c2=8;c2<12;c2++)
-											{
-												perm2[c2]=8+all_perm_4[q][c2-8];
-											}
-
-											//Checks if Hadamard product of row perm1 on matrix1 and col perm2 on matrix2 is Hadamard or not.
-											for(int i1=0;i1<12;i1++)
-											{
-												for(int j1=0;j1<12;j1++)
-												{
-													Had_prod[i1][j1]=matrix1[perm1[i1]][j1]*matrix2[i1][perm2[j1]];
-												}
-											}
-											check = Had_Had_t();	
-											
-											if(check==true)
-											{
-												//counts the number of permutations(either perm1 or perm2) that have identity on their diagonal 
-												//blocks.
-												if(i==0 || j==0 || k==0 || n==0 || p==0 || q==0)
-												{
-													cout<<"i="<<i<<" j="<<j<<" k="<<k<<endl;
-													count++;
-													cout<<"n="<<n<<" p="<<p<<" q="<<q<<endl;
-													cout<<"_____________________________"<<endl;
-												}
-												/*
-												for(int i3=0;i3<12;i3++)
-												{
-													for(int j3=0;j3<12;j3++)
-													cout<<Had_prod[i3][j3]<<" ";
-													cout<<endl;
-												}
-												cout<<"_________________________________"<<endl;
-
-												*/
-											}
-
-										}
-									}
-								}
+								perm1[a1]=all_perm_4[i][a1];
+							}	
+							for(int b1=4;b1<8;b1++)
+							{
+								perm1[b1]=4+all_perm_4[j][b1-4];
 							}
-						}
-					}
+							for(int c1=8;c1<12;c1++)
+							{
+								perm1[c1]=8+all_perm_4[k][c1-8];
+							}
 
+							
+
+							//Inner nested loop.
+							for(int n=0;n<1;n++)
+							{
+									for(int p=0;p<24;p++)
+									{
+											for(int q=0;q<24;q++)
+											{
+													
+													//Makes secnd permutation matrix, perm2.
+													for(int a2=0;a2<4;a2++)
+                                                							{
+														perm2[a2]=all_perm_4[n][a2];
+													}
+													for(int b2=4;b2<8;b2++)
+													{
+														perm2[b2]=4+all_perm_4[p][b2-4];
+													}
+													for(int c2=8;c2<12;c2++)
+													{
+														perm2[c2]=8+all_perm_4[q][c2-8];
+													}
+											
+													//Procedure 1: check if Hadamard product of row perm1 on matrix1, and col perm2 on matrix2 is
+													//Hadamard.
+											for(int i1=0;i1<12;i1++)
+                                                                                        {
+                                                                                                for(int j1=0;j1<12;j1++)
+                                                                                                {
+                                                                                                        Had_prod[i1][j1]=matrix2[perm1[i1]][j1]*matrix1[i1][perm2[j1]];
+                                                                                                }
+                                                                                        }
+                                                                                        check = Had_Had_t();
+                                                                                        if(check==true)
+                                                                                        {
+                                                                                                count++;
+                                                                                                cout<<"n= "<<n<<endl;                                                        
+                                                                                                for(int i3=0;i3<12;i3++)
+                                                                                                {
+                                                                                                        for(int j3=0;j3<12;j3++)
+                                                                                                        cout<<Had_prod[i3][j3]<<" ";
+                                                                                                        cout<<endl;
+                                                                                                }
+                                                                                                cout<<"_________________________________"<<endl;
+
+                                                                                        }
+
+											//Procedure 2: Check if row perm1 and col perm2 on matrix1 is equal to matrix2. 		
+													if(check_if_equal(perm1,perm2)==true)
+													{
+														for(int i1=0;i1<12;i1++)
+														{
+															cout<<perm1[i1]<<" ";
+														}
+														cout<<endl;
+														for(int i1=0;i1<12;i1++)
+														{
+															cout<<perm2[i1]<<" ";
+														}
+														cout<<"______________________________"<<endl;
+														cout<<"It's true!"<<endl;
+													}
+													
+											}
+									}
+							}
+					}
+			}
+	}
+
+							
 cout<<"Total number of Hadamard matrices obtained = "<<count<<endl;
 for(int i=0;i<12;i++)
 	{
@@ -215,11 +237,18 @@ for(int i=0;i<12;i++)
 		{
 			if((j%4==0 || j%4==1 || j%4==2))
 			{
-				cout<<matrix1[i][j]<<" ";
+				if(matrix1[i][j]==1)
+				
+					cout<<matrix1[i][j]<<" ";
+				else
+					cout<<"- ";
 			}
 			else if(j%4==3)
 			{
-				cout<<matrix1[i][j]<<"|";
+				if(matrix1[i][j]==1)
+					cout<<matrix1[i][j]<<"|";
+				else
+					cout<<"-|";
 			}
 			
 		}
@@ -236,11 +265,17 @@ for(int i=0;i<12;i++)
                 {
                         if((j%4==0 || j%4==1 || j%4==2))
                         {
-                                cout<<matrix2[i][j]<<" ";
+                                if(matrix2[i][j]==1)
+				cout<<matrix2[i][j]<<" ";
+				else
+					cout<<"- ";
                         }
                         else if(j%4==3)
                         {
+				if(matrix2[i][j]==1)
                                 cout<<matrix2[i][j]<<"|";
+				else
+					cout<<"-|";
                         }
                         
                 }
@@ -251,6 +286,8 @@ for(int i=0;i<12;i++)
                 }
                 
         }
+
+
  //Checks if matrix 1 and matrix 2 is Hadamard. This piece of code was written here and not at the beginning of the program so that it's output can be viewed easily and
  //you dont have to scroll above the printed matrices to find it. 
  cout<<"Is matrix 1 Hadamard? "<<endl;
@@ -261,9 +298,67 @@ for(int i=0;i<12;i++)
 
 											
 
+bool check_if_equal(int perm1[12], int perm2[12])
+{
+	int col_first_row[12]={0};
+	int nth_row[12]={0};
+	nth_row[0]=1;
+	for(int i1=0;i1<12;i1++)
+	{
+		if(matrix1[perm1[0]][perm2[i1]]==matrix2[0][i1])
+		{
+			col_first_row[i1]=1;
+		}
+		else if(matrix1[perm1[0]][perm2[i1]]!=matrix2[0][i1])
+		{
+			col_first_row[i1]=-1;
+		}
+	}
 
+	bool check_pos=true;
+	bool check_neg=true;
+	for(int i2=1;i2<12;i2++)
+	{
+		for(int j2=0;j2<12;j2++)
+		{
+			if(matrix1[perm1[i2]][perm2[j2]]*col_first_row[j2]!=matrix2[i2][j2])
+			{
+				check_pos=false;
+				nth_row[i2]=-1;
+			}
+			if((matrix1[perm1[i2]][perm2[j2]]*col_first_row[j2]*-1)!=matrix2[i2][j2])
+			{
+				check_neg=false;
+				nth_row[i2]=1;
+			}
+		}
+		if(check_pos==false && check_neg==false)
+		{
+			return false;
+		}
+		else
+		{
+			check_pos=true;
+			check_neg=true;
+		}
+	}
 
+	
+	cout<<"Row sign "<<endl;
+	for(int i3=0;i3<12;i3++)
+		{
+			cout<<nth_row[i3]<<" ";
+		}
+		cout<<endl;
+	cout<<"Column sign "<<endl;
+	for(int i4=0;i4<12;i4++)
+	{
+		cout<<col_first_row[i4]<<" ";
+	}
+	cout<<endl;
+	return true;
 
+}
 
 
 

@@ -1,3 +1,24 @@
+/*ORDER 12
+ * What does this program do?
+ * This program generates two Hadamard matrices H, H_dash using a method described in the paper: :"Recursive Construction for New Symmetric Designs", Ionin and Kharaghani, 
+ * and finds if their Hadamard_product is Hadamard or not.
+*/
+
+
+/*
+ * Input required.
+ * None.
+ */
+
+
+/*
+ * Data structures used:
+ * All operations are performed using pointers. All those functions not defined here can be found in make_Bush_matrices.cc included in this program. 
+ */
+
+
+
+
 #include <iostream>
 #include <cmath>
 #include <ctime>
@@ -14,6 +35,7 @@ using namespace std;
 
 int main()
 {
+// Base cases.
 
 int** Q = new int*[3];  int q[3][3] = {{0,-1,1},{1,0,-1},{-1,1,0}};//Normalized
 int** J3= new int*[3]; int j3[3][3]={{1,1,1},{1,1,1},{1,1,1}};
@@ -54,8 +76,10 @@ const int order_J = 3;
 const int order_I = 3;
 const int order_Q = 3;
 bool c;
+
 c = Had_4x3n_generate(A0,order_a_1,B0,order_b_1,J3,order_J,Q,order_Q,I3,order_I);
 cout<<c<<endl;
+
 }
 
 bool Had_4x3n_generate(int** a_n,const int order_a_n, int** b_n,const int order_b_n, int** J,const int order_J, int** Q,const int order_Q,int** I,const int order_I)

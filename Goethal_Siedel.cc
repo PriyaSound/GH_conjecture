@@ -1,3 +1,33 @@
+/* ORDER 12
+ * What does this program do?
+ * This program generates 2 Goethal Seidel matrices of order 12, with a,b,c,d,of order 3, circulant (1,-1) with two functions goethal_seidel(b,c,d) and goethal_seidel_I(b,c,d).
+ * Goethal Seidel 1:
+ * [A     BR    CR    DR  ]
+ * [-BR   A     D'R   -C'R]
+ * [-CR   -D'R  A     B'R ]
+ * [-DR   C'R   -B'R  A   ]
+ *
+ * Goethal Seidel 2:
+ * [A     B      C     D ]
+ * [-B    A      D'   -C']
+ * [-C    -D'    A     B']
+ * [-D    C'    -B'    A ]
+ *
+ * It checks if the two are Hadamard or not and prints both the matrices, along with b,c,d.
+ */
+
+
+
+/*
+ * Input required: None
+ */
+
+
+
+/* Data structures used:
+ * All matrices are stored as pointers. Not much memory is used, there are no loops, so works fine.
+ */
+
 #include <iostream>
 #include <cmath>
 #include <ctime>
@@ -25,6 +55,9 @@ for(int i=0;i<3;i++)
 	c[i] = new int[3];
 }
 
+
+//Circulant matrices. (Note, you can use back circulant ones too and check if it makes a Hadamard matrix or not.)
+
 b[0][0]=1; b[0][1]=-1;b[0][2]=-1;
 b[1][0]=-1;b[1][1]=-1;b[1][2]=1;
 b[2][0]=-1;b[2][1]=1;b[2][2]=-1;
@@ -36,7 +69,9 @@ c[2][0]=-1;c[2][1]=-1;c[2][2]=1;
 d[0][0]=-1;d[0][1]=-1;d[0][2]=1;
 d[1][0]=-1;d[1][1]=1;d[1][2]=-1;
 d[2][0]=1;d[2][1]=-1;d[2][2]=-1;
+
 int** gs = goethal_seidel(b,c,d);
+
 cout<<"b ="<<endl;
 print(b,3);
 cout<<"c ="<<endl;
@@ -47,6 +82,8 @@ cout<<"______________________________"<<endl;
 print(gs,12);
 cout<<"______________________________"<<endl;
 cout<<check_Hadamard(gs,12);
+
+
 gs = goethal_seidel_I(b,c,d);
 cout<<"b ="<<endl;
 print(b,3);
@@ -192,12 +229,12 @@ int** goethal_seidel(int** b, int** c, int** d)
                         gs[i+6][j+3]=-gs[i+3][j+6];
                 }
         }
-        // -C_tR
+        // C_tR
         for(int i=0;i<3;i++)
         {
                 for(int j=0;j<3;j++)
                 {
-                        gs[i+9][j+3]=-gs[i+3][j+9];
+                        gs[i+9][j+3]=gs[i+3][j+9];
                 }
         }
         // -B_tR
@@ -227,7 +264,7 @@ int** goethal_seidel_I(int** b, int** c, int** d)
                         gs[i][j] = 1;
                 }
         }
-        // BR
+        // B
         for(int i=0;i<3;i++)
         {
                 for(int j=3;j<6;j++)
@@ -235,7 +272,7 @@ int** goethal_seidel_I(int** b, int** c, int** d)
                         gs[i][j] = b[i][j-3];
                 }
         }
-        // CR
+        // C
         for(int i=0;i<3;i++)
         {
                 for(int j=6;j<9;j++)
@@ -243,7 +280,7 @@ int** goethal_seidel_I(int** b, int** c, int** d)
                         gs[i][j]= c[i][j-6];
                 }
         }
-        //DR
+        //D
         for(int i=0;i<3;i++)
         {
                 for(int j=9;j<12;j++)
@@ -260,7 +297,7 @@ int** goethal_seidel_I(int** b, int** c, int** d)
                         gs[i][j]=1;
                 }
         }
-        // D_tR
+        // D_t
         for(int i=3;i<6;i++)
         {
                 for(int j=6;j<9;j++)
@@ -268,7 +305,7 @@ int** goethal_seidel_I(int** b, int** c, int** d)
                         gs[i][j]=d[(j-6)][(i-3)];
                 }
         }
-        // -C_tR
+        // -C_t
         for(int i=3;i<6;i++)
         {
                 for(int j=9;j<12;j++)
@@ -285,7 +322,7 @@ int** goethal_seidel_I(int** b, int** c, int** d)
                 }
         }
 
-        // B_tR
+        // B_t
         for(int i=6;i<9;i++)
         {
                 for(int j=9;j<12;j++)
@@ -303,7 +340,7 @@ int** goethal_seidel_I(int** b, int** c, int** d)
                 }
         }
         //Rest of the matrix
-         // -BR
+         // -B
         for(int i=0;i<3;i++)
         {
                 for(int j=0;j<3;j++)
@@ -311,7 +348,7 @@ int** goethal_seidel_I(int** b, int** c, int** d)
                         gs[i+3][j] = -gs[i][j+3];
                 }
         }
-        // -CR
+        // -C
         for(int i=0;i<3;i++)
         {
                 for(int j=0;j<3;j++)
@@ -319,7 +356,7 @@ int** goethal_seidel_I(int** b, int** c, int** d)
                         gs[i+6][j]= -gs[i][j+6];
                 }
         }
-        //-DR
+        //-D
         for(int i=0;i<3;i++)
         {
                 for(int j=0;j<3;j++)
@@ -327,7 +364,7 @@ int** goethal_seidel_I(int** b, int** c, int** d)
                         gs[i+9][j] = -gs[i][j+9];
                 }
         }
-        // -D_tR
+        // -D_t
         for(int i=0;i<3;i++)
         {
                 for(int j=0;j<3;j++)
@@ -335,15 +372,15 @@ int** goethal_seidel_I(int** b, int** c, int** d)
                         gs[i+6][j+3]=-gs[i+3][j+6];
                 }
         }
-	// -C_tR
+	// C_t
         for(int i=0;i<3;i++)
         {
                 for(int j=0;j<3;j++)
                 {
-                        gs[i+9][j+3]=-gs[i+3][j+9];
+                        gs[i+9][j+3]=gs[i+3][j+9];
                 }
         }
-        // -B_tR
+        // -B_t
         for(int i=0;i<3;i++)
         {
                 for(int j=0;j<3;j++)
