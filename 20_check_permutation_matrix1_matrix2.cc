@@ -185,7 +185,9 @@ int main(int argc,char* argv[])
 		int perm1[20]={0};
 		int perm2[20]={0};
 		int index = atoi(argv[1]);
-		int* bin = integer_to_k(index,5);
+		int arg_bin_first = (index)%2;
+		int arg_bin_second = (arg_bin_first+1)%2;
+		int* ter = integer_to_k(index,4,3);
 
  
  
@@ -193,19 +195,20 @@ int main(int argc,char* argv[])
 	int all_perm_4[24][4]={{0,1,2,3},{0,1,3,2},{0,2,1,3},{0,2,3,1},{0,3,1,2},{0,3,2,1},{1,0,2,3},{1,0,3,2},{1,2,0,3},{1,2,3,0},{1,3,0,2},{1,3,2,0},{2,0,1,3},{2,0,3,1},{2,1,0,3},{2,1,3,0},{2,3,0,1},{2,3,1,0},{3,0,1,2},{3,0,2,1},{3,1,0,2},{3,1,2,0},{3,2,0,1},{3,2,1,0}};
 	bool cz;
 	bool check;
-	
+	int start_j=0;
+	int start_k=0;
 	//Outer nested loop to make perm1.
-	for(int i=(12*bin[0]);i<(12+12*bin[0]);i++)
+	for(int i=(8*ter[0]);i<(8+8*ter[0]);i++)
 	{
-		for(int j=(12*bin[1]);j<(12+12*bin[1]);j++)
+		for(int j=(8*ter[1]);j<(8+8*ter[1]);j++)
 		{
-			for(int k=(12*bin[2]);k<(12+12*bin[2]);k++)
+			for(int k=(8*ter[2]);k<(8+8*ter[2]);k++)
 			{
 				
 				cout<<"i ="<<i<<" j= "<<j<<" k= "<<k<<endl;
-				for(int l=(12*bin[3]);l<(12+12*bin[3]);l++)
+				for(int l=(8*ter[3]);l<(8+8*ter[3]);l++)
 				{
-					for(int m=(12*bin[4]);m<(12+12*bin[4]);m++)
+					for(int m=(12*arg_bin_first);m<(12+12*arg_bin_first);m++)
 					{
 						
 						//Making perm1.
