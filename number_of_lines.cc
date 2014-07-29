@@ -4,12 +4,21 @@
 #include<fstream>
 #include<sstream>
 using namespace std;
-void readFile(int num, int part);
+bool readFile(int num, int part);
 
 int main(int argc, char** argv)
 {
 	
-	for(int i=0;i<32;i++)
+	int upper_limit=0;
+	if(atoi(argv[1])==2 || atoi(argv[1])==3 || atoi(argv[1])==4)
+	{
+		upper_limit=32;
+	}
+	else if(atoi(argv[1])==5 || atoi(argv[1])==6)
+	{
+		upper_limit=81;
+	}
+	for(int i=0;i<upper_limit;i++)
 	{
 		readFile(atoi(argv[1]),i);
 	}
@@ -18,7 +27,7 @@ int main(int argc, char** argv)
 	
 }
 
-void readFile(int num, int part)
+bool readFile(int num, int part)
 {
 	bool found = false;
 	string line, word;
@@ -92,7 +101,7 @@ void readFile(int num, int part)
 			outputfile.close();
 			return false;
 		}
-	*/
+		*/
 	}
 	
 
@@ -115,11 +124,66 @@ void readFile(int num, int part)
                         }while(outputfile.eof()==false);
 			cout<<"Number of lines in: "<<filename<<" is "<<linenum<<endl;	
 					outputfile.close();
+					return true;
                 }
                 else
                 {
                         cout<<"Can't open file"<<endl;
                         outputfile.close();
+			return false;
+                }
+        }
+
+
+ 	else if(num==5)
+        {
+                linenum=0;
+                filename = "/home/soundap9/attempt_final_o/o.65." + str_part;
+                outputfile.open(filename.c_str(),ios::in|ios::out|ios::app);
+                if(outputfile.is_open())
+                {
+
+                        do
+                        {
+                                getline(outputfile,line);
+                                linenum++;
+
+                        }while(outputfile.eof()==false);
+                        cout<<"Number of lines in: "<<filename<<" is "<<linenum<<endl;
+                                        outputfile.close();
+					return true;
+                }
+                else
+                {
+                        cout<<"Can't open file"<<filename<<endl;
+                        outputfile.close();
+			return false;
+                }
+        }
+
+        else if(num==6)
+        {
+		linenum=0;
+                filename = "/home/soundap9/attempt_final_o/o.66." + str_part;
+                outputfile.open(filename.c_str(),ios::in|ios::out|ios::app);
+                if(outputfile.is_open())
+                {
+
+                        do
+                        {
+                                getline(outputfile,line);
+                                linenum++;
+
+                        }while(outputfile.eof()==false);
+                        cout<<"Number of lines in: "<<filename<<" is "<<linenum<<endl;
+                                        outputfile.close();
+					return true;
+                }
+                else
+                {
+                        cout<<"Can't open file"<<filename<<endl;
+                        outputfile.close();
+			return false;
                 }
         }
 
@@ -128,6 +192,7 @@ void readFile(int num, int part)
 		cout<<"Enter a valid part number"<<endl;
 		outputfile.close();
 	}
+
 
 }
 

@@ -1,0 +1,10 @@
+Universe     = vanilla
+Executable   = p2tsc2
+Output       = /home/soundap9/o/o_part2.$(Cluster).$(Process)
+Error        = /home/soundap9/e/e_part2.$(Cluster).$(Process)
+Log          = /home/soundap9/e/log_part2.$(Cluster)
+Notification = Never
+
+Arguments    = $(Process)
+
+Queue 32

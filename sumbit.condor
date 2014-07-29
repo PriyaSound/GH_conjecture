@@ -1,0 +1,11 @@
+verse     = vanilla
+Executable   = nsc2
+Output       = /home/soundap9/o/Had20.$(Cluster).$(Process)
+Error        = /home/soundap9/e/Had20.error
+Log          = /home/soundap9/e/Had20.log
+Notification = Never
+
+Arguments    = $(Process)
+
+Queue 100
+
