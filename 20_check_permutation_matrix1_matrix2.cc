@@ -208,7 +208,7 @@ int main(int argc,char* argv[])
 				cout<<"i ="<<i<<" j= "<<j<<" k= "<<k<<endl;
 				for(int l=(8*ter[3]);l<(8+8*ter[3]);l++)
 				{
-					for(int m=(12*arg_bin_first);m<(12+12*arg_bin_first);m++)
+					for(int m=(12*arg_bin_second);m<(12+12*arg_bin_second);m++)
 					{
 						
 						//Making perm1.
