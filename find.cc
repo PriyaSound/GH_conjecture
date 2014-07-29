@@ -1,7 +1,20 @@
 /*
- * This program checks 4 output files of 4 different programs run on condor, based on the index input which can be 1, 2, 3 or 4, for strings of the type "-1".
- * The four files are the output files for 4 condor programs run on cluster 15, 16, 17 and 20
- * 3 of the files are located in /home/soundap9/o and are called:
+ * This program checks 4 output files of 4 different programs run on condor, based on the index input which can be 2,3,5 or 6 for strings of the type "-1".
+ * The four files are the output files for 4 condor programs run on cluster 16, 17, 65 and 66.
+ * Listed are all the files ever run on condor by me. All of them are not running, only 4 out of the ones below are running currently, out of a total of 6 programs that I started running initially
+ * Since programs correspondnig to indices 1 and 4 have been stopped, you dont have to use them.
+ * 
+ *
+ *
+ *
+ * Arguments passed to the program:
+ * Any index which can be 2,3,5 or 6
+ *
+ *
+ *
+ *
+ * Files that this program searches through:
+ * 1 of the files are located in /home/soundap9/o and are called:
  * 
  * o.15.($part) (index=1)
  * Details:
@@ -26,9 +39,23 @@
  * Details:
  * Program: 20_check_permutation_matrix1_matrix2.cc
  * Executable: 2cpmm
+ * Stopped on 28/07/2014, 
+ *
+ * 2 are located in /home/soundap9/attempt_final_o and are called:
+ * 
+ * o.65.($Process) (index=5)
+ * Details:
+ * Program: 20_check_permutation_matrix1_matrix2.cc (with arg_bin_first)
+ * Executable 2cpm1m2
  * (Running)
  *
- * The program basically checks if any of the 3 programs have printed a Hadamard matrix.
+ * o.66.($Process) (index=6)
+ * Details:
+ * Program: 20_check_permutation_matrix1_matrix2.cc (with arg_bin_second)
+ * Executable: 2cpm1m2_second
+ * (Running)
+ *
+ * The program basically checks if any of the 4 programs have printed a Hadamard matrix.
  */
 
 #include<iostream>
@@ -41,8 +68,17 @@ bool readFile(int num, int part);
 
 int main(int argc, char** argv)
 {
-	
-	for(int i=0;i<32;i++)
+	int upper_limit=0;
+	if(atoi(argv[1])==1 || atoi(argv[1])==2 || atoi(argv[1])==3 || atoi(argv[1])==4)
+	{
+		upper_limit=32;
+	}
+	else if(atoi(argv[1])==5 || atoi(argv[1])==6)
+	{
+		upper_limit=81;
+	}
+
+	for(int i=0;i<upper_limit;i++)
 	{
 		readFile(atoi(argv[1]),i);
 	}
@@ -74,7 +110,7 @@ bool readFile(int num, int part)
 	string str_14num = ss.str();
 	ss.str(std::string());
 	ss.clear();
-
+/*
 	if(num==1)
 	{
 		filename = "/home/soundap9/o/o.15." +  str_part;
@@ -125,7 +161,9 @@ bool readFile(int num, int part)
 			return false;
 		}
 	}
-	else if(num==2 || num==3 || num==4)
+
+*/
+	if(num==2 || num==3 || num==4)
 	{
 		linenum=0;
 		found=false;
@@ -165,8 +203,81 @@ bool readFile(int num, int part)
 			return false;
                 }
         }
+	else if(num==5)
+	{       linenum=0;
+                found=false;
+                filename = "/home/soundap9/attempt_final_o/o.65." + str_part;
+                outputfile.open(filename.c_str(),ios::in|ios::out|ios::app);
+                if(outputfile.is_open())
+                {
 
-	else
+                        do
+                        {
+                                getline(outputfile,line);
+                                linenum++;
+                                pos = line.find("-1");
+                                if(pos!= string::npos)
+                                {
+                                        cout<<"Line number "<<linenum<<endl;
+                                        cout<<" Position: "<<pos<<endl;
+                                        outputfile.close();
+                                        return true;
+                                }
+                                else if(outputfile.eof())
+                                {
+                                        cout<<"Reached end of file. String not found. "<<endl;
+                                        cout<<filename<<endl;
+                                        outputfile.close();
+                                        return false;
+                                }
+                        }while(found==false);
+                }
+                else
+                {
+                        cout<<"Can't open file"<<endl;
+                        outputfile.close();
+                        return false;
+                }
+	}
+
+
+	else if(num==6)
+        {       linenum=0;
+                found=false;
+                filename = "/home/soundap9/attempt_final_o/o.66." + str_part;
+                outputfile.open(filename.c_str(),ios::in|ios::out|ios::app);
+                if(outputfile.is_open())
+                {
+
+                        do
+                        {
+                                getline(outputfile,line);
+                                linenum++;
+                                pos = line.find("-1");
+                                if(pos!= string::npos)
+                                {
+                                        cout<<"Line number "<<linenum<<endl;
+                                        cout<<" Position: "<<pos<<endl;
+                                        outputfile.close();
+                                        return true;
+                                }
+                                else if(outputfile.eof())
+                                {
+                                        cout<<"Reached end of file. String not found. "<<endl;
+                                        cout<<filename<<endl;
+                                        outputfile.close();
+                                        return false;
+                                }
+                        }while(found==false);
+                }
+                else
+                {
+                        cout<<"Can't open file"<<endl;
+                        outputfile.close();
+                        return false;
+                }
+        }
+
 	{
 		cout<<"Enter a valid part number"<<endl;
 		outputfile.close();
