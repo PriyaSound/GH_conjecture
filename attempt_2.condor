@@ -1,0 +1,10 @@
+Universe     = vanilla
+Executable   = 2cpm1m2_second
+Requirements = ((Machine=="17anubis.cs.uleth.ca")||(Machine=="17baal.cs.uleth.ca")||(Machine=="17carson.cs.uleth.ca")||(Machine=="17daniel.cs.uleth.ca")||(Machine=="17fifth.cs.uleth.ca")||(Machine=="17ford.cs.uleth.ca")||(Machine=="17jacob.cs.uleth.ca")||(Machine=="17janet.cs.uleth.ca")||(Machine=="17john.cs.uleth.ca")||(Machine=="17jonas.cs.uleth.ca")||(Machine=="17keller.cs.uleth.ca")||(Machine=="17lorne.cs.uleth.ca")||(Machine=="17michael.cs.uleth.ca")||(Machine=="17oneill.cs.uleth.ca")||(Machine=="17osiris.cs.uleth.ca")||(Machine=="17prior.cs.uleth.ca")||(Machine=="17ra.cs.uleth.ca")||(Machine=="17radek.cs.uleth.ca")||(Machine=="17rodney.cs.uleth.ca")||(Machine=="17ronon.cs.uleth.ca")||(Machine=="17sam.cs.uleth.ca")||(Machine=="17siler.cs.uleth.ca")||(Machine=="17teyla.cs.uleth.ca")||(Machine=="17thor.cs.uleth.ca")||(Machine=="17vala.cs.uleth.ca")||(Machine=="17weir.cs.uleth.ca"))
+Output       = /home/soundap9/attempt_final_o/o.$(Cluster).$(Process)
+Error        = /home/soundap9/attempt_final_e/e.$(Cluster).$(Process)
+Log          = /home/soundap9/attempt_final_e/log.$(Cluster).$(Process)
+Notification = Never
+Arguments    = $(Process)
+
+Queue 81
